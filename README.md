@@ -34,6 +34,135 @@ bin/cake server -p 8765
 
 Then visit `http://localhost:8765` to see the welcome page.
 
+
+
+```markdown
+# 📚 `/books` Endpoint – API Documentation
+
+This endpoint returns book records with optional pagination, filtering, sorting, and eager-loaded tags. All examples assume the JSON format (`/books.json`) but work the same without the extension if the client sends `Accept: application/json`.
+
+---
+
+## Base URL
+
+```
+
+GET /books            # HTML/table view
+
+GET /books.json       # JSON API view
+
+```
+
+---
+
+## 1  Pagination
+
+| Query Param | Type | Description                | Default |
+|-------------|------|----------------------------|---------|
+| `page`      | int  | Page number                | `1`     |
+| `limit`     | int  | Items per page             | `10`    |
+
+*Example*
+
+```http
+GET /books.json?page=2&limit=5
+
+```
+
+---
+
+## 2 Filtering
+
+### Category (case-insensitive, partial match)
+
+| Query Param | Type | Description |
+| --- | --- | --- |
+| `category` | string | Returns books whose **category** contains the given string |
+
+*Example*
+
+```
+GET /books.json?category=Fantasy
+
+```
+
+Matches “Fantasy”, “Epic Fantasy”, “Urban Fantasy”, etc.
+
+---
+
+## 3 Sorting
+
+| Query Param | Type | Description |
+| --- | --- | --- |
+| `sort` | string | Column to sort by (`PubDate`, `title`, `category`) |
+| `direction` | string | `asc` or `desc` |
+
+*Example (newest first)*
+
+```
+GET /books.json?sort=PubDate&direction=desc
+
+```
+
+Multiple keys are supported:
+
+```
+GET /books.json?sort[]=PubDate&direction[]=asc&sort[]=title&direction[]=asc
+
+```
+
+---
+
+## 4 Included Data
+
+Each book record contains:
+
+| Field | Notes |
+| --- | --- |
+| **Book properties** | e.g. `id`, `title`, `category`, `PubDate`, `image` |
+| **`tags`** | Array of related tags (may be empty) |
+
+The tags are eager-loaded with `contain(['Tags'])`, so one query gives you complete data.
+
+---
+
+## 5 Response Example
+
+```
+GET /books.json?category=Fantasy&sort=PubDate&direction=asc
+
+```
+
+```json
+{
+  "books": [
+    {
+      "id": 17,
+      "title": "The Way of Kings",
+      "category":  Fantasy",
+      "PubDate": "2010-08-31",
+      "image": "17001",
+      "tags": [
+        { "id": 3, "name": "High Fantasy" },
+        { "id": 7, "name": "Series" }
+      ]
+    },
+    ...
+  ],
+}
+
+
+##  Source References
+
+| Topic | CakePHP Cookbook Section |
+| --- | --- |
+| Pagination basics & query params | https://book.cakephp.org/4/en/controllers/components/pagination.html |
+| Sorting with `sort`/`direction` | https://book.cakephp.org/4/en/controllers/components/pagination.html#sorting-data |
+| Query Builder `where()` / `LIKE` | https://book.cakephp.org/4/en/orm/query-builder.html#where-conditions |
+| Eager-loading with `contain()` | https://book.cakephp.org/4/en/orm/retrieving-data-and-resultsets.html#eager-loading-associations |
+| JSON/automatic serialization | https://book.cakephp.org/4/en/views/json-and-xml-views.html#enabling-automatic-serialization |
+
+
 ## Update
 
 Since this skeleton is a starting point for your application and various files
