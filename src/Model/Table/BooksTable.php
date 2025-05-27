@@ -45,6 +45,8 @@ class BooksTable extends Table
 
         $this->hasMany('Tags', [
             'foreignKey' => 'book_id',
+            'dependent' => true,
+            'cascadeCallbacks' => true,
         ]);
     }
 

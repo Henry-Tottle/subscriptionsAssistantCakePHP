@@ -18,9 +18,20 @@
         <div class="tags view content">
             <h3><?= h($tag->id) ?></h3>
             <table>
-                <tr>
-                    <th><?= __('Book') ?></th>
-                    <td><?= $tag->hasValue('book') ? $this->Html->link($tag->book->title, ['controller' => 'Books', 'action' => 'view', $tag->book->id]) : '' ?></td>
+
+                <?php if (!empty($books)): ?>
+                    <h4>Books with this tag:</h4>
+                    <ul>
+                        <?php foreach ($books as $book): ?>
+                            <li>
+                                <?= $this->Html->link(h($book->title), ['controller' => 'Books', 'action' => 'view', $book->id]) ?>
+                                by <?= h($book->author) ?>
+                            </li>
+                        <?php endforeach; ?>
+                    </ul>
+                <?php else: ?>
+                    <p>No books found with this tag.</p>
+                <?php endif; ?>
                 </tr>
                 <tr>
                     <th><?= __('Tag') ?></th>

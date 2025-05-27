@@ -1,47 +1,20 @@
 <?php
 /**
  * @var \App\View\AppView $this
- * @var iterable<\App\Model\Entity\Tag> $tags
+ * @var \Cake\Datasource\ResultSetInterface|\App\Model\Entity\Tag[] $tags
  */
 ?>
 <div class="tags index content">
-    <?= $this->Html->link(__('New Tag'), ['action' => 'add'], ['class' => 'button float-right']) ?>
     <h3><?= __('Tags') ?></h3>
-    <div class="table-responsive">
-        <table>
-            <thead>
-                <tr>
-                    <th><?= $this->Paginator->sort('id') ?></th>
-                    <th><?= $this->Paginator->sort('book_id') ?></th>
-                    <th>Cover</th>
-                    <th><?= $this->Paginator->sort('tag') ?></th>
-                    <th class="actions"><?= __('Actions') ?></th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php foreach ($tags as $tag): ?>
-                <tr>
-                    <td><?= $this->Number->format($tag->id) ?></td>
-                    <td><?= $tag->hasValue('book') ? $this->Html->link($tag->book->title, ['controller' => 'Books', 'action' => 'view', $tag->book->id]) : '' ?></td>
-                    <td><img src="https://jackets.dmmserver.com/media/140/<?= h($tag->book->image) ?>.jpg"/></td>
-                    <td><?= h($tag->tag) ?></td>
-                    <td class="actions">
-                        <?= $this->Html->link(__('View'), ['action' => 'view', $tag->id]) ?>
-                        <?= $this->Html->link(__('Edit'), ['action' => 'edit', $tag->id]) ?>
-                        <?= $this->Form->postLink(
-                            __('Delete'),
-                            ['action' => 'delete', $tag->id],
-                            [
-                                'method' => 'delete',
-                                'confirm' => __('Are you sure you want to delete # {0}?', $tag->id),
-                            ]
-                        ) ?>
-                    </td>
-                </tr>
-                <?php endforeach; ?>
-            </tbody>
-        </table>
-    </div>
+
+    <ul>
+        <?php foreach ($tags as $tag): ?>
+            <li>
+                <?= $this->Html->link(h($tag->tag ?? 'Unnamed tag'), ['action' => 'view', $tag->id]) ?>
+            </li>
+        <?php endforeach; ?>
+    </ul>
+
     <div class="paginator">
         <ul class="pagination">
             <?= $this->Paginator->first('<< ' . __('first')) ?>
@@ -50,6 +23,8 @@
             <?= $this->Paginator->next(__('next') . ' >') ?>
             <?= $this->Paginator->last(__('last') . ' >>') ?>
         </ul>
-        <p><?= $this->Paginator->counter(__('Page {{page}} of {{pages}}, showing {{current}} record(s) out of {{count}} total')) ?></p>
+        <p><?= $this->Paginator->counter(
+                __('Page {{page}} of {{pages}}, showing {{current}} tag(s) out of {{count}} total')
+            ) ?></p>
     </div>
 </div>

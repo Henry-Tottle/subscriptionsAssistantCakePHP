@@ -25,7 +25,8 @@ class TagsController extends AppController
         ];
         $query = $this->Tags->find()
             ->contain(['Books']);
-        $tags = $this->paginate($query);
+        $tags = $query->select(['Tags.id','Tags.tag'])->distinct('tag');
+        $tags = $this->paginate($tags);
 
         $this->set(compact('tags'));
     }
@@ -39,9 +40,26 @@ class TagsController extends AppController
      */
     public function view($id = null)
     {
-        $tag = $this->Tags->get($id, contain: ['Books']);
-        $this->set(compact('tag'));
+        // Get the tag entity
+        $tag = $this->Tags->get($id);
+
+        // Find all tags with the same tag text
+        $tagsWithSameText = $this->Tags->find()
+            ->where(['tag' => $tag->tag])
+            ->contain(['Books']) // load associated books
+            ->all();
+
+        // Collect all unique books linked to those tags
+        $books = [];
+        foreach ($tagsWithSameText as $t) {
+            if ($t->book) {
+                $books[$t->book->id] = $t->book;
+            }
+        }
+        // Pass tag and books to the view
+        $this->set(compact('tag', 'books'));
     }
+
 
     /**
      * Add method
