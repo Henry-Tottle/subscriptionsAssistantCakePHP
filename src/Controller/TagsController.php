@@ -69,10 +69,19 @@ class TagsController extends AppController
     public function add()
     {
         $tag = $this->Tags->newEmptyEntity();
+
+        $bookId = $this->request->getQuery('book_id');
+        if ($bookId) {
+            $tag->book_id = $bookId;
+        }
+
         if ($this->request->is('post')) {
             $tag = $this->Tags->patchEntity($tag, $this->request->getData());
             if ($this->Tags->save($tag)) {
                 $this->Flash->success(__('The tag has been saved.'));
+                if ($tag->book_id) {
+                    return $this->redirect(['controller' => 'Books', 'action' => 'view', $tag->book_id]);
+                }
 
                 return $this->redirect(['action' => 'index']);
             }

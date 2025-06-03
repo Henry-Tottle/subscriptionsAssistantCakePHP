@@ -66,6 +66,8 @@
             </table>
             <div class="related">
                 <h4><?= __('Related Tags') ?></h4>
+                <?= $this->Html->link(__('New Tag'), ['controller' => 'Tags','action' => 'add', '?' => ['book_id' => $book->id]], ['class' => 'side-nav-item']) ?>
+
                 <?php if (!empty($book->tags)) : ?>
                 <div class="table-responsive">
                     <table>

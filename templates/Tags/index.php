@@ -4,6 +4,8 @@
  * @var \Cake\Datasource\ResultSetInterface|\App\Model\Entity\Tag[] $tags
  */
 ?>
+<?php echo $this->Html->link(__('List Books'), ['controller' => 'Books', 'action' => 'index'], ['class' => 'side-nav-item'])
+?>
 <div class="tags index content">
     <h3><?= __('Tags') ?></h3>
 

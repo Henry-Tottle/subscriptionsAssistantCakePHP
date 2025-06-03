@@ -19,27 +19,38 @@ class BooksController extends AppController
     {
         $queryParams = $this->request->getQueryParams();
 
-        $query = $this->Books->find('all',
-        ['contain' => ['Tags']]);
+        $query = $this->Books->find('all', [
+            'contain' => ['Tags'],
+        ]);
 
-        if (!empty($queryParams['category']))
-        {
-            $query->where(['Books.subject LIKE' => '%' . $queryParams['category'] . '%']);
+        if (!empty($queryParams['subject'])) {
+            $query->where(['Books.subject LIKE' => '%' . $queryParams['subject'] . '%']);
         }
-        if (!empty($queryParams['format']))
-        {
+
+        if (!empty($queryParams['format'])) {
             $query->where(['Books.format' => $queryParams['format']]);
         }
+        $format = $this->request->getQuery('format');
+
+        if ($format === '') {
+            $query = $this->request->getQueryParams();
+            unset($query['format']);
+            $url = $this->request->getUri()->getPath() . '?' . http_build_query($query);
+            return $this->response->withHeader('Location', $url)->withStatus(302);
+        }
+
 
         $this->paginate = [
-            'limit' => 100, // set default number of results per page
-            'sortableFields' => ['PubDate', 'title', 'category', 'picksCount'], // Add all fields you want to allow
+            'limit' => 100,
+            'sortableFields' => ['id', 'pubDate', 'title', 'subject', 'picksCount'],
         ];
+
         $books = $this->paginate($query);
 
         $this->set(compact('books'));
         $this->viewBuilder()->setOption('serialize', ['books']);
     }
+
 
     /**
      * View method
