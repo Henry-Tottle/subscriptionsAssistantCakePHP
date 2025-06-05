@@ -19,6 +19,7 @@ use Cake\ORM\Entity;
  * @property string|null $price
  * @property int|null $picksCount
  * @property string|null $image
+ * @property string|null $description
  *
  * @property \App\Model\Entity\Tag[] $tags
  */
@@ -45,5 +46,6 @@ class Book extends Entity
         'picksCount' => true,
         'image' => true,
         'tags' => true,
+        'description' => true
     ];
 }

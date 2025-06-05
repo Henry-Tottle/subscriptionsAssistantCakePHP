@@ -131,6 +131,6 @@ class TagsController extends AppController
             $this->Flash->error(__('The tag could not be deleted. Please, try again.'));
         }
 
-        return $this->redirect(['action' => 'index']);
+        return $this->redirect(['controller' => 'Books', 'action' => 'view', $tag->book_id]);
     }
 }

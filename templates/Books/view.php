@@ -63,7 +63,24 @@
                     <th><?= __('PubDate') ?></th>
                     <td><?= h($book->pubDate) ?></td>
                 </tr>
+                <tr>
+                    <th><?= __('Description') ?></th>
+                    <td><?PHP
+                        if ($book->description) {
+                            echo $book->description;
+                        }
+                        else
+                        {
+                            echo $this->Html->link(
+                                __('Fetch Description'),
+                                ['action' => 'fetchDescription', $book->id],
+                                ['class' =>'button']
+                            );
+                        }
+                        ?></td>
+                </tr>
             </table>
+
             <div class="related">
                 <h4><?= __('Related Tags') ?></h4>
                 <?= $this->Html->link(__('New Tag'), ['controller' => 'Tags','action' => 'add', '?' => ['book_id' => $book->id]], ['class' => 'side-nav-item']) ?>
@@ -90,7 +107,7 @@
                                     ['controller' => 'Tags', 'action' => 'delete', $tag->id],
                                     [
                                         'method' => 'delete',
-                                        'confirm' => __('Are you sure you want to delete # {0}?', $tag->id),
+                                        'confirm' => __('Are you sure you want to delete # {0} {1}?', $tag->id, $tag->tag),
                                     ]
                                 ) ?>
                             </td>
@@ -100,6 +117,7 @@
                 </div>
                 <?php endif; ?>
             </div>
+            <?= $this->Html->link(__('Back'), ['action' => 'index'], ['class' => 'back button']) ?>
         </div>
     </div>
 </div>
