@@ -26,6 +26,18 @@ class BooksController extends AppController
             'contain' => ['Tags'],
         ]);
 
+        if (!empty($queryParams['search']))
+        {
+            $search = '%' . $queryParams['search'] . '%';
+            $query->where([
+                'OR' => [
+                    'Books.title LIKE' => $search,
+                    'Books.author LIKE' => $search,
+                    'Books.isbn' => $queryParams['search'],
+                ]
+            ]);
+        }
+
         if (!empty($queryParams['subject'])) {
             $query->where(['Books.subject LIKE' => '%' . $queryParams['subject'] . '%']);
         }

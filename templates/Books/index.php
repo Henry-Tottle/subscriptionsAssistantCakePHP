@@ -16,8 +16,18 @@
 </aside>
 
 <div class="books index content">
+    <div>
+        <?= $this->Form->create(null, ['type' => 'get']) ?>
+        <?= $this->Form->control('search', [
+            'label' => false,
+            'placeholder' => 'Search by title, author or ISBN',
+            'value' => $this->request->getQuery('search')
+]) ?>
+        <?= $this->Form->submit('Search') ?>
+        <?= $this->Form->end() ?>
+    </div>
     <?= $this->Html->link(__('New Book'), ['action' => 'add'], ['class' => 'button float-right']) ?>
-<!--    --><?php //= $this->Html->link('Import Books CSV', ['action' => 'import'], ['class' => 'button float-right']) ?>
+    <?= $this->Html->link('Import Books CSV', ['action' => 'import'], ['class' => 'button float-right']) ?>
 
 
     <h3><?= __('Books') ?></h3>
@@ -48,6 +58,8 @@
         <?= $this->Form->end() ?>
 
     </div>
+
+
     <div class="books-container">
         <?php foreach ($books as $book): ?>
             <div class="book-card">
@@ -78,4 +90,5 @@
     </div>
 </div>
 </div>
+
 
