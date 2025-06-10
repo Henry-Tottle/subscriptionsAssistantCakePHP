@@ -92,12 +92,24 @@
                             <div class="review">
                                 <p><?= nl2br(h($review->review)) ?></p>
                                 <p><strong><?= __('Written by:') ?></strong> <?= h($review->user->name ?? 'Unknown') ?></p>
+                                <?= $this->Html->link(__('View'), ['controller' => 'Reviews','action' => 'view', $review->id]) ?>
+                                <?= $this->Html->link(__('Edit'), ['controller' => 'Reviews','action' => 'edit', $review->id]) ?>
+                                <?= $this->Form->postLink(
+                                    __('Delete'),
+                                    ['controller' => 'Reviews','action' => 'delete', $review->id],
+                                    [
+                                        'method' => 'delete',
+                                        'confirm' => __('Are you sure you want to delete # {0}?', $review->id),
+                                    ]
+                                ) ?>
                             </div>
+
                         <?php endforeach; ?>
                     </div>
                 <?php else: ?>
                     <p><?= __('No reviews yet.') ?></p>
                 <?php endif; ?>
+                <h4><?= __('Related Tags') ?></h4>
                 <?= $this->Html->link(__('New Tag'), ['controller' => 'Tags','action' => 'add', '?' => ['book_id' => $book->id]], ['class' => 'side-nav-item']) ?>
 
                 <?php if (!empty($book->tags)) : ?>

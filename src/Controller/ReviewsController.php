@@ -85,8 +85,9 @@ class ReviewsController extends AppController
             $review = $this->Reviews->patchEntity($review, $this->request->getData());
             if ($this->Reviews->save($review)) {
                 $this->Flash->success(__('The review has been saved.'));
+                $bookId = $review->book_id;
 
-                return $this->redirect(['action' => 'index']);
+                return $this->redirect(['controller' => 'Books', 'action' => 'view', $bookId]);
             }
             $this->Flash->error(__('The review could not be saved. Please, try again.'));
         }
@@ -112,6 +113,8 @@ class ReviewsController extends AppController
             $this->Flash->error(__('The review could not be deleted. Please, try again.'));
         }
 
-        return $this->redirect(['action' => 'index']);
+        $bookId = $review->book_id;
+        $this->Reviews->delete($review);
+        return $this->redirect(['controller' => 'Books', 'action' => 'view', $bookId]);
     }
 }

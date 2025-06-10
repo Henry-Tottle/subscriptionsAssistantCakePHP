@@ -19,7 +19,7 @@
             <fieldset>
                 <legend><?= __('Add Review') ?></legend>
                 <?php
-                    echo $this->Form->control('book_id', ['options' => $books]);
+                    echo $this->Form->control('book_id', ['type' => 'hidden']);
                     echo $this->Form->control('user_id', ['options' => $users]);
                     echo $this->Form->control('review', ['type' => 'textarea', 'rows' => 16]);
                 ?>

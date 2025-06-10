@@ -35,7 +35,7 @@
                                     <p><strong>Published:</strong> <?php echo h($book->pubDate); ?></p>
                                     <p><strong>Picks:</strong> <?php echo h($book->picksCount); ?></p>
                                     <p><strong>Format:</strong> <?php echo h($book->format); ?></p>
-                                    <?= $this->Html->link(__('View'), ['action' => 'view', $book->id], ['class' => 'button view-button']) ?>
+                                    <?= $this->Html->link(__('View'), ['controller' => 'Books', 'action' => 'view', $book->id], ['class' => 'button view-button']) ?>
                                 </div>
                             </div>
                         <?php endforeach; ?>

@@ -31,6 +31,10 @@
             </fieldset>
             <?= $this->Form->button(__('Submit')) ?>
             <?= $this->Form->end() ?>
-        </div>
+            <?= $this->Html->link(
+                __('Cancel'),
+                ['controller' => 'Books', 'action' => 'view', $review->book_id ?? null],
+                ['class' => 'button']
+            ) ?>        </div>
     </div>
 </div>
