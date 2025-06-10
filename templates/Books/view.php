@@ -82,6 +82,8 @@
             </table>
 
             <div class="related">
+                <h4><?= __('Related Reviews') ?></h4>
+                <?= $this->Html->link(__('Add review'), ['controller' => 'Reviews', 'action' => 'add', '?' => ['book_id' => $book->id]], ['class' => 'button']) ?>
                 <h4><?= __('Related Tags') ?></h4>
                 <?= $this->Html->link(__('New Tag'), ['controller' => 'Tags','action' => 'add', '?' => ['book_id' => $book->id]], ['class' => 'side-nav-item']) ?>
 
