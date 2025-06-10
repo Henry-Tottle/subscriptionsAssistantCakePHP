@@ -83,8 +83,21 @@
 
             <div class="related">
                 <h4><?= __('Related Reviews') ?></h4>
-                <?= $this->Html->link(__('Add review'), ['controller' => 'Reviews', 'action' => 'add', '?' => ['book_id' => $book->id]], ['class' => 'button']) ?>
-                <h4><?= __('Related Tags') ?></h4>
+                <?= $this->Html->link(__('New Review'), ['controller' => 'Reviews','action' => 'add', '?' => ['book_id' => $book->id]], ['class' => 'side-nav-item']) ?>
+
+                <?php if (!empty($book->reviews)): ?>
+                    <div class="reviews">
+
+                        <?php foreach ($book->reviews as $review): ?>
+                            <div class="review">
+                                <p><?= nl2br(h($review->review)) ?></p>
+                                <p><strong><?= __('Written by:') ?></strong> <?= h($review->user->name ?? 'Unknown') ?></p>
+                            </div>
+                        <?php endforeach; ?>
+                    </div>
+                <?php else: ?>
+                    <p><?= __('No reviews yet.') ?></p>
+                <?php endif; ?>
                 <?= $this->Html->link(__('New Tag'), ['controller' => 'Tags','action' => 'add', '?' => ['book_id' => $book->id]], ['class' => 'side-nav-item']) ?>
 
                 <?php if (!empty($book->tags)) : ?>

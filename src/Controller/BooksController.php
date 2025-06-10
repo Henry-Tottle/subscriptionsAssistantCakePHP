@@ -76,7 +76,7 @@ class BooksController extends AppController
      */
     public function view($id = null)
     {
-        $book = $this->Books->get($id, contain: ['Tags']);
+        $book = $this->Books->get($id, contain: ['Tags', 'Reviews.Users']);
         $this->set(compact('book'));
     }
 

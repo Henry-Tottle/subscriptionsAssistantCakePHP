@@ -48,6 +48,12 @@ class BooksTable extends Table
             'dependent' => true,
             'cascadeCallbacks' => true,
         ]);
+
+        $this->hasMany('Reviews', [
+            'foreignKey' => 'book_id',
+            'dependent' => true,
+            'cascadeCallbacks' => true,
+        ]);
     }
 
     /**

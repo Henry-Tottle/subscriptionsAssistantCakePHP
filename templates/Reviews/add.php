@@ -21,7 +21,7 @@
                 <?php
                     echo $this->Form->control('book_id', ['options' => $books]);
                     echo $this->Form->control('user_id', ['options' => $users]);
-                    echo $this->Form->control('review');
+                    echo $this->Form->control('review', ['type' => 'textarea', 'rows' => 16]);
                 ?>
             </fieldset>
             <?= $this->Form->button(__('Submit')) ?>

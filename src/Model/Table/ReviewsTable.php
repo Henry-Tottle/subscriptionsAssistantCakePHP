@@ -72,7 +72,6 @@ class ReviewsTable extends Table
 
         $validator
             ->scalar('review')
-            ->maxLength('review', 255)
             ->requirePresence('review', 'create')
             ->notEmptyString('review');
 
