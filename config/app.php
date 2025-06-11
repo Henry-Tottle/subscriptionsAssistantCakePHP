@@ -284,6 +284,7 @@ return [
             'driver' => 'Cake\Database\Driver\Mysql',
             'persistent' => false,
             'host' => 'mysql.railway.internal',
+            'port' => 3306,
             'username' => 'root',
             'password' => 'xTNxpyetzjzFYifIJtOwsxebcbYUUfzO',
             'database' => 'railway',
