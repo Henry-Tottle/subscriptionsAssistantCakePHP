@@ -280,27 +280,20 @@ return [
          * in app_local.php depending on the application's needs.
          */
         'default' => [
-            'className' => Connection::class,
-            'driver' => Mysql::class,
+            'className' => 'Cake\Database\Connection',
+            'driver' => 'Cake\Database\Driver\Mysql',
             'persistent' => false,
-            'timezone' => 'UTC',
-            'host' => env('DB_HOST'),
-            'port' => env('DB_PORT', 3306),
-            'username' => env('DB_USER'),
-            'password' => env('DB_PASSWORD'),
-            'database' => env('DB_NAME'),
-
-            /*
-             * For MariaDB/MySQL the internal default changed from utf8 to utf8mb4, aka full utf-8 support
-             */
+            'host' => env('DATABASE_HOST', '127.0.0.1'),
+            'username' => env('DATABASE_USER', 'root'),
+            'password' => env('DATABASE_PASSWORD', 'password'),
+            'database' => env('DATABASE_NAME', 'subscriptions_test_database'),
+            'unix_socket' => null,
             'encoding' => 'utf8mb4',
-
-            /*
-             * If your MySQL server is configured with `skip-character-set-client-handshake`
-             * then you MUST use the `flags` config to set your charset encoding.
-             * For e.g. `'flags' => [\PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8mb4']`
-             */
-            'flags' => [],
+            'timezone' => 'UTC',
+            'flags' => [
+                PDO::ATTR_PERSISTENT => false,
+                PDO::MYSQL_ATTR_USE_BUFFERED_QUERY => true,
+            ],
             'cacheMetadata' => true,
             'log' => false,
 
