@@ -268,6 +268,21 @@ return [
      *   other RDBMS.
      */
     'Datasources' => [
+        'default' => [
+            'className' => 'Cake\Database\Connection',
+            'driver' => 'Cake\Database\Driver\Mysql',
+            'persistent' => false,
+            'host' => env('DB_HOST'),
+            'port' => env('DB_PORT', 3306),
+            'username' => env('DB_USER'),
+            'password' => env('DB_PASSWORD'),
+            'database' => env('DB_NAME'),
+            'encoding' => 'utf8mb4',
+            'timezone' => 'UTC',
+            'flags' => [],
+            'cacheMetadata' => true,
+            'log' => false,
+        ],
         /*
          * These configurations should contain permanent settings used
          * by all environments.
