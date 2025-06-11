@@ -101,6 +101,13 @@ class TagsController extends AppController
     public function edit($id = null)
     {
         $tag = $this->Tags->get($id, contain: []);
+
+        $bookId = $this->request->getQuery('book_id');
+
+        if ($bookId)
+        {
+            $tag->book_id = $bookId;
+        }
         if ($this->request->is(['patch', 'post', 'put'])) {
             $tag = $this->Tags->patchEntity($tag, $this->request->getData());
             if ($this->Tags->save($tag)) {

@@ -11,7 +11,7 @@
     <div class="sidebar">
         <h4 class="heading"><?= __('Actions')?></h4>
         <?= $this->Html->link(__('List Tags'), ['controller' => 'Tags', 'action' => 'index'], ['class' => 'side-nav-item']) ?>
-
+        <?= $this->Html->link(__('logout'), ['controller' => 'Users', 'action' => 'logout'], ['class' => 'side-nav-item']) ?>
     </div>
 </aside>
 
@@ -55,7 +55,15 @@
             <option value="Paperback / softback"<?= $this->request->getQuery('format') === 'Paperback / softback' ? 'selected' : '' ?>>Paperback</option>
             <option value="Hardback"<?= $this->request->getQuery('format') === 'Hardback' ? 'selected' : '' ?>>Hardback</option>
         </select>
-        <?= $this->Form->end() ?>
+        <label  for="subject">Category:</label>
+
+
+        <select name="subject" id="subject" onchange="this.form.submit()">
+            <?php foreach ($subjects as $subject): ?>
+                <?php $selected = ($this->request->getQuery('subject') === $subject) ? 'selected' : ''; ?>
+                <option value="<?= h($subject) ?>" <?= $selected ?>><?= h($subject) ?></option>
+            <?php endforeach; ?>
+        </select>
 
     </div>
 

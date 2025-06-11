@@ -23,7 +23,7 @@ class BooksController extends AppController
         $queryParams = $this->request->getQueryParams();
 
         $query = $this->Books->find('all', [
-            'contain' => ['Tags'],
+            'contain' => ['Tags', 'Reviews'],
         ]);
 
         if (!empty($queryParams['search']))
@@ -41,6 +41,7 @@ class BooksController extends AppController
         if (!empty($queryParams['subject'])) {
             $query->where(['Books.subject LIKE' => '%' . $queryParams['subject'] . '%']);
         }
+
 
         if (!empty($queryParams['format'])) {
             $query->where(['Books.format' => $queryParams['format']]);
@@ -62,7 +63,19 @@ class BooksController extends AppController
 
         $books = $this->paginate($query);
 
-        $this->set(compact('books'));
+        $subjects = $this->Books
+            ->find()
+            ->select(['Books.subject'])
+            ->distinct(['Books.subject'])
+            ->enableHydration(false)
+            ->all()
+            ->sortBy('subject')
+            ->extract('subject')
+            ->toArray();
+
+
+
+        $this->set(compact('books', 'subjects', 'format'));
         $this->viewBuilder()->setOption('serialize', ['books']);
     }
 

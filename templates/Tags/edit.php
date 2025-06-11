@@ -23,7 +23,10 @@
             <fieldset>
                 <legend><?= __('Edit Tag') ?></legend>
                 <?php
-                    echo $this->Form->control('book_id', ['options' => $books]);
+                    echo $this->Form->control('book_id', ['options' => $books,
+                        'label' => 'Book',
+                        'empty' => 'Choose a book',
+                        'class' => 'select2']);
                     echo $this->Form->control('tag');
                 ?>
             </fieldset>
