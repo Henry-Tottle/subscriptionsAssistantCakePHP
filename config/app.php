@@ -268,21 +268,7 @@ return [
      *   other RDBMS.
      */
     'Datasources' => [
-        'default' => [
-            'className' => 'Cake\Database\Connection',
-            'driver' => 'Cake\Database\Driver\Mysql',
-            'persistent' => false,
-            'host' => env('DB_HOST'),
-            'port' => env('DB_PORT', 3306),
-            'username' => env('DB_USER'),
-            'password' => env('DB_PASSWORD'),
-            'database' => env('DB_NAME'),
-            'encoding' => 'utf8mb4',
-            'timezone' => 'UTC',
-            'flags' => [],
-            'cacheMetadata' => true,
-            'log' => false,
-        ],
+
         /*
          * These configurations should contain permanent settings used
          * by all environments.
@@ -298,6 +284,11 @@ return [
             'driver' => Mysql::class,
             'persistent' => false,
             'timezone' => 'UTC',
+            'host' => env('DB_HOST'),
+            'port' => env('DB_PORT', 3306),
+            'username' => env('DB_USER'),
+            'password' => env('DB_PASSWORD'),
+            'database' => env('DB_NAME'),
 
             /*
              * For MariaDB/MySQL the internal default changed from utf8 to utf8mb4, aka full utf-8 support
