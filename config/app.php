@@ -6,6 +6,12 @@ use Cake\Database\Driver\Mysql;
 use Cake\Log\Engine\FileLog;
 use Cake\Mailer\Transport\MailTransport;
 
+$databaseUrl = env('DATABASE_URL');
+$parsedUrl = $databaseUrl ? parse_url($databaseUrl) : [];
+
+$scheme = $parsedUrl['scheme'] ?? 'mysql'; // or 'postgres'
+$driver =  Mysql::class;
+
 return [
     /*
      * Debug Level:
@@ -280,43 +286,25 @@ return [
          * in app_local.php depending on the application's needs.
          */
         'default' => [
-            'className' => 'Cake\Database\Connection',
-            'driver' => 'Cake\Database\Driver\Mysql',
+            'className' => Connection::class,
+            'driver' => $driver,
             'persistent' => false,
-            'host' => 'mysql.railway.internal',
-            'port' => 3306,
-            'username' => 'root',
-            'password' => 'xTNxpyetzjzFYifIJtOwsxebcbYUUfzO',
-            'database' => 'railway',
-            'unix_socket' => null,
+            'host' => $parsedUrl['host'] ?? 'localhost',
+            'port' => isset($parsedUrl['port']) ? (int)$parsedUrl['port'] : null,
+            'username' => $parsedUrl['user'] ?? 'root',
+            'password' => $parsedUrl['pass'] ?? '',
+            'database' => isset($parsedUrl['path']) ? ltrim($parsedUrl['path'], '/') : 'my_app',
             'encoding' => 'utf8mb4',
             'timezone' => 'UTC',
             'flags' => [
-                PDO::ATTR_PERSISTENT => false,
-                PDO::MYSQL_ATTR_USE_BUFFERED_QUERY => true,
+                \PDO::ATTR_PERSISTENT => false,
+                \PDO::MYSQL_ATTR_USE_BUFFERED_QUERY => true,
             ],
             'cacheMetadata' => true,
             'log' => false,
-
-            /*
-             * Set identifier quoting to true if you are using reserved words or
-             * special characters in your table or column names. Enabling this
-             * setting will result in queries built using the Query Builder having
-             * identifiers quoted when creating SQL. It should be noted that this
-             * decreases performance because each query needs to be traversed and
-             * manipulated before being executed.
-             */
             'quoteIdentifiers' => false,
-
-            /*
-             * During development, if using MySQL < 5.6, uncommenting the
-             * following line could boost the speed at which schema metadata is
-             * fetched from the database. It can also be set directly with the
-             * mysql configuration directive 'innodb_stats_on_metadata = 0'
-             * which is the recommended value in production environments
-             */
-            //'init' => ['SET GLOBAL innodb_stats_on_metadata = 0'],
         ],
+
 
         /*
          * The test connection is used during the test suite.
