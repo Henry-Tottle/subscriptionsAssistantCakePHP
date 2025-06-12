@@ -22,9 +22,8 @@ class BooksController extends AppController
     {
         $queryParams = $this->request->getQueryParams();
 
-        $query = $this->Books->find('all', [
-            'contain' => ['Tags', 'Reviews'],
-        ]);
+        $query = $this->Books->find()
+        ->contain(['Tags', 'Reviews']);
 
         if (!empty($queryParams['search']))
         {
@@ -49,9 +48,9 @@ class BooksController extends AppController
         $format = $this->request->getQuery('format');
 
         if ($format === '') {
-            $query = $this->request->getQueryParams();
-            unset($query['format']);
-            $url = $this->request->getUri()->getPath() . '?' . http_build_query($query);
+            $queryParams = $this->request->getQueryParams();
+            unset($queryParams['format']);
+            $url = $this->request->getUri()->getPath() . '?' . http_build_query($queryParams);
             return $this->response->withHeader('Location', $url)->withStatus(302);
         }
 
