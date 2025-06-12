@@ -89,7 +89,25 @@ class BooksController extends AppController
     public function view($id = null)
     {
         $book = $this->Books->get($id, contain: ['Tags', 'Reviews.Users']);
-        $this->set(compact('book'));
+
+        $tagNames = collection($book->tags)->extract('tag')->toList();
+
+        if (!empty($tagNames))
+        {
+            $relatedBooks = $this->Books->find()
+                ->distinct(['Books.id'])
+                ->matching('Tags', function ($q) use ($tagNames) {
+                    return $q->where(['Tags.tag IN' => $tagNames]);
+                })
+                ->where(['Books.id !=' => $book->id ])
+                ->limit(10)
+                ->all();
+        }
+        else
+        {
+            $relatedBooks = [];
+        }
+        $this->set(compact('book', 'relatedBooks'));
     }
 
     /**

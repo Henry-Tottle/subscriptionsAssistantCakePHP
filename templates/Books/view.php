@@ -143,8 +143,33 @@
                     </table>
                 </div>
                 <?php endif; ?>
+                <h3>Related Books</h3>
+                <h5>These books share the tags with the book you are viewing:</h5>
+                <?php if (!empty($relatedBooks)): ?>
+                    <div class="books-container">
+                        <?php foreach ($relatedBooks as $related): ?>
+                            <div class="book-card">
+                                <div class="book-image">
+                                    <img src="https://jackets.dmmserver.com/media/140/<?= h($related->image) ?>.jpg" alt="<?= h($related->title) ?>" />
+                                </div>
+                                <div class="book-details">
+                                    <h6><?= h($related->title) ?></h6>
+                                    <p><strong>Author:</strong> <?= h($related->author) ?></p>
+                                    <p><strong>ISBN:</strong> <?= h($related->isbn) ?></p>
+                                    <p><strong>Published:</strong> <?= h($related->pubDate) ?></p>
+                                    <p><strong>Picks:</strong> <?= h($related->picksCount) ?></p>
+                                    <p><strong>Format:</strong> <?= h($related->format) ?></p>
+                                    <?= $this->Html->link(__('View'), ['action' => 'view', $related->id], ['class' => 'button view-button']) ?>
+                                </div>
+                            </div>
+                        <?php endforeach; ?>
+                    </div>
+                <?php else: ?>
+                    <p>No related books found.</p>
+                <?php endif; ?>
+
             </div>
-            <?= $this->Html->link(__('Back'), ['action' => 'index'], ['class' => 'back button']) ?>
+            <?= $this->Html->link(__('Back'), $this->request->referer(), ['class' => 'back button']) ?>
         </div>
     </div>
 </div>
