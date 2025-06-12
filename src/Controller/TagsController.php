@@ -20,16 +20,22 @@ class TagsController extends AppController
         $this->paginate = [
             'limit' => 100,
             'order' => [
-                'Tags.name' => 'asc',
+                'Tags.tag' => 'asc', // Changed to sort by the actual field
             ]
         ];
-        $query = $this->Tags->find()
-            ->contain(['Books']);
-        $tags = $query->select(['Tags.id','Tags.tag'])->distinct('tag');
-        $tags = $this->paginate($tags);
 
+        $query = $this->Tags->find()
+            ->contain(['Books'])
+            ->select([
+                'Tags__id' => $this->Tags->find()->func()->min('Tags.id'),
+                'Tags.tag'
+            ])
+            ->group(['Tags.tag']);
+
+        $tags = $this->paginate($query);
         $this->set(compact('tags'));
     }
+
 
     /**
      * View method
