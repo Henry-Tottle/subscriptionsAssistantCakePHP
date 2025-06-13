@@ -108,6 +108,8 @@ class BooksController extends AppController
             $relatedBooks = [];
         }
         $this->set(compact('book', 'relatedBooks'));
+        $this->viewBuilder()->setOption('serialize', ['book', 'relatedBooks']);
+
     }
 
     /**
