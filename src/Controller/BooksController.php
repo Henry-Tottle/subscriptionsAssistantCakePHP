@@ -90,25 +90,27 @@ class BooksController extends AppController
     {
         $book = $this->Books->get($id, contain: ['Tags', 'Reviews.Users']);
 
-//        $tagNames = collection($book->tags)->extract('tag')->toList();
-//
-//        if (!empty($tagNames))
-//        {
-//            $relatedBooks = $this->Books->find()
-//                ->distinct(['Books.id'])
-//                ->matching('Tags', function ($q) use ($tagNames) {
-//                    return $q->where(['Tags.tag IN' => $tagNames]);
-//                })
-//                ->where(['Books.id !=' => $book->id ])
-//                ->limit(10)
-//                ->all();
-//        }
-//        else
-//        {
-//            $relatedBooks = [];
-//        }
-        $this->set(compact('book'));
-//        $this->viewBuilder()->setOptio//        $this->viewBuilder()->setOption('serialize', ['book', 'relatedBooks']);n('serialize', ['book', 'relatedBooks']);
+        $tagNames = collection($book->tags)->extract('tag')->toList();
+
+        if (!empty($tagNames))
+        {
+            $relatedBooks = $this->Books->find()
+                ->where(['Books.id'])
+                ->matching('Tags', function ($q) use ($tagNames) {
+                    return $q->where(['Tags.tag IN' => $tagNames]);
+                })
+                ->where(['Books.id !=' => $book->id])
+                ->contain(['Tags'])
+                ->distinct(['Books.id'])
+                ->limit(10)
+                ->all();
+        }
+        else
+        {
+            $relatedBooks = [];
+        }
+        $this->set(compact('book', 'relatedBooks'));
+        $this->viewBuilder()->setOption('serialize', ['book', 'relatedBooks']);
 
     }
 
