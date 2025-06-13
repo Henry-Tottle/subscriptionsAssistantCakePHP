@@ -115,7 +115,7 @@ class UsersController extends AppController
                 'controller' => 'Books',
                 'action' => 'index',
             ]);
-
+            $this->request->getSession()->renew();
             return $this->redirect($redirect);
         }
         // display error if user submitted and authentication failed
