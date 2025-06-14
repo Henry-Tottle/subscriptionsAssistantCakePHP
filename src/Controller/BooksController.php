@@ -86,9 +86,9 @@ class BooksController extends AppController
      * @return \Cake\Http\Response|null|void Renders view
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
-    public function view($id = null)
+    public function view(int $id)
     {
-        $book = $this->Books->get($id, contain: ['Tags', 'Reviews.Users']);
+        $book = $this->Books->get($id, ['contain' => ['Tags', 'Reviews.Users']]);
 
         $tagNames = collection($book->tags)->extract('tag')->toList();
 
