@@ -560,3 +560,10 @@ p {
     text-align: center;
 }
 
+@media (max-width: 639px) {
+    .row .column {
+        width: 100% !important;
+        max-width: 100% !important;
+    }
+}
+

@@ -95,11 +95,12 @@ class BooksController extends AppController
         if (!empty($tagNames))
         {
             $relatedBooks = $this->Books->find()
-                ->where(['Books.id'])
+
                 ->matching('Tags', function ($q) use ($tagNames) {
                     return $q->where(['Tags.tag IN' => $tagNames]);
                 })
                 ->where(['Books.id !=' => $book->id])
+                ->distinct(['Books.id'])
                 ->contain(['Tags'])
                 ->distinct(['Books.id'])
                 ->limit(10)

@@ -5,6 +5,31 @@
  * @var \Cake\Collection\CollectionInterface|string[] $books
  */
 ?>
+<script defer>
+    const tagInput = document.querySelector('#tag');
+    const suggestionList = document.querySelector('#tag-suggestions');
+    let debounceTimeout;
+
+    tagInput.addEventListener('input', () => {
+        clearTimeout(debounceTimeout);
+        debounceTimeout = setTimeout(() => {
+            const query = tagInput.value.trim();
+            if (query.length > 1) {
+                fetch(`/tags/suggest.json?q=${encodeURIComponent(query)}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        suggestionList.innerHTML = '';
+                        data.tags.forEach(tag => {
+                            const option = document.createElement('option');
+                            option.value = tag.tag;
+                            suggestionList.appendChild(option);
+                        });
+                    });
+            }
+        }, 300);
+    });
+</script>
+
 <div class="row">
     <aside class="column">
         <div class="side-nav">
@@ -23,7 +48,14 @@
                         'empty' => 'Choose a book',
                         'class' => 'select2'],
                     );
-                    echo $this->Form->control('tag');
+                    echo $this->Form->control('tag',
+                    [
+                        'type' => 'text',
+                        'label' => 'Tag',
+                        'autocomplete' => 'off',
+                        'list' => 'tag-suggestions'
+                    ]);
+                    echo '<datalist id="tag-suggestions"></datalist>';
                 ?>
             </fieldset>
             <?= $this->Form->button(__('Submit')) ?>

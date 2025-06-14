@@ -146,4 +146,17 @@ class TagsController extends AppController
 
         return $this->redirect(['controller' => 'Books', 'action' => 'view', $tag->book_id]);
     }
+
+    public function suggest()
+    {
+        $this->request->allowMethod('get');
+        $query = $this->request->getQuery('q');
+        $tags = $this->Tags->find()
+            ->where(['tag LIKE' => $query . '%'])
+            ->limit(10);
+
+        $this->set(compact('tags'));
+        $this->viewBuilder()->setOption('serialize', ['tags']);
+
+    }
 }
