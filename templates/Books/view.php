@@ -169,7 +169,12 @@
                 <?php endif; ?>
 
             </div>
-            <?= $this->Html->link(__('Back'), $this->request->referer(), ['class' => 'back button']) ?>
-        </div>
+            <?php
+            $referer = $this->request->referer();
+            if (!$referer || $referer === '/') {
+                $referer = ['action' => 'index']; // fallback to Books index page
+            }
+            ?>
+            <?= $this->Html->link(__('Back'), $referer, ['class' => 'back button']) ?>        </div>
     </div>
 </div>
