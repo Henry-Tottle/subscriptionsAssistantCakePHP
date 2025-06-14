@@ -15,6 +15,9 @@ class TagsController extends AppController
      *
      * @return \Cake\Http\Response|null|void Renders view
      */
+
+
+
     public function index()
     {
         $this->paginate = [
@@ -147,17 +150,26 @@ class TagsController extends AppController
         return $this->redirect(['controller' => 'Books', 'action' => 'view', $tag->book_id]);
     }
 
-    public function suggest()
+    public function suggest(): \Cake\Http\Response
     {
-        $this->request->allowMethod('get');
+        $this->request->allowMethod(['get']);
+
         $query = $this->request->getQuery('q');
-        $tags = $this->Tags->find()
-            ->distinct(['tag'])
-            ->where(['tag LIKE' => $query . '%'])
-            ->limit(10);
+        $tags = [];
 
-        $this->set(compact('tags'));
-        $this->viewBuilder()->setOption('serialize', ['tags']);
+        if (!empty($query)) {
+            $tags = $this->Tags->find()
+                ->select(['tag'])
+                ->distinct(['tag'])
+                ->where(['tag LIKE' => '%' . $query . '%'])
+                ->limit(10)
+                ->all()
+                ->toList();
+        }
 
+        return $this->response
+            ->withType('application/json')
+            ->withStringBody(json_encode(['tags' => $tags]));
     }
+
 }
