@@ -170,11 +170,15 @@
 
             </div>
             <?php
-            $referer = $this->request->referer();
-            if (!$referer || $referer === '/') {
-                $referer = ['action' => 'index']; // fallback to Books index page
+            $referer = $this->request->referer(true); // Get relative referer like /books/view/1
+            $current = $this->request->getRequestTarget(); // e.g. /books/view/1
+
+            // Prevent back button pointing to current page (e.g., after refresh or redirect)
+            if ($referer === $current || !$referer || $referer === '/') {
+                $referer = ['action' => 'index'];
             }
             ?>
-            <?= $this->Html->link(__('Back'), $referer, ['class' => 'back button']) ?>        </div>
+            <?= $this->Html->link(__('Back'), $referer, ['class' => 'back button']) ?>
+        </div>
     </div>
 </div>
