@@ -31,7 +31,6 @@ $cakeDescription = 'Subscriptions Assistant Back End -- Built With CakePHP';
 
     <?= $this->fetch('meta') ?>
     <?= $this->fetch('css') ?>
-    <?= $this->fetch('script') ?>
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 
 </head>
@@ -50,7 +49,11 @@ $cakeDescription = 'Subscriptions Assistant Back End -- Built With CakePHP';
     </main>
     <footer>
     </footer>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
+    <?= $this->Html->script('https://code.jquery.com/jquery-3.6.0.min.js') ?>
+    <?= $this->Html->script('https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js') ?>
+    <?= $this->fetch('script') ?>
+
+
 </body>
 </html>

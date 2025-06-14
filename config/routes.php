@@ -62,6 +62,8 @@ return function (RouteBuilder $routes): void {
          * ...and connect the rest of 'Pages' controller's URLs.
          */
         $builder->connect('/pages/*', 'Pages::display');
+        $builder->get('tags/suggest', 'Tags::suggest');
+
 
         /*
          * Connect catchall routes for all controllers.

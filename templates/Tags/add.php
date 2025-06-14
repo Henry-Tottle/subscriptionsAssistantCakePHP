@@ -5,30 +5,7 @@
  * @var \Cake\Collection\CollectionInterface|string[] $books
  */
 ?>
-<script defer>
-    const tagInput = document.querySelector('#tag');
-    const suggestionList = document.querySelector('#tag-suggestions');
-    let debounceTimeout;
 
-    tagInput.addEventListener('input', () => {
-        clearTimeout(debounceTimeout);
-        debounceTimeout = setTimeout(() => {
-            const query = tagInput.value.trim();
-            if (query.length > 1) {
-                fetch(`/tags/suggest.json?q=${encodeURIComponent(query)}`)
-                    .then(response => response.json())
-                    .then(data => {
-                        suggestionList.innerHTML = '';
-                        data.tags.forEach(tag => {
-                            const option = document.createElement('option');
-                            option.value = tag.tag;
-                            suggestionList.appendChild(option);
-                        });
-                    });
-            }
-        }, 300);
-    });
-</script>
 
 <div class="row">
     <aside class="column">
@@ -53,19 +30,55 @@
                         'type' => 'text',
                         'label' => 'Tag',
                         'autocomplete' => 'off',
-                        'list' => 'tag-suggestions'
+                        'list' => 'tag-suggestions',
+                        'id' => 'tag-input'
                     ]);
-                    echo '<datalist id="tag-suggestions"></datalist>';
                 ?>
+                <datalist id="tag-suggestions"></datalist>
+
             </fieldset>
             <?= $this->Form->button(__('Submit')) ?>
             <?= $this->Form->end() ?>
         </div>
     </div>
 </div>
+<?php $this->start('script'); ?>
 <script>
-    $(document).ready(function() {
-        $('.select2').select2();
+    document.addEventListener('DOMContentLoaded', () => {
+        const tagInput = document.querySelector('#tag-input');
+        const suggestionList = document.querySelector('#tag-suggestions');
+        let debounceTimeout;
+
+        if (tagInput && suggestionList) {
+            tagInput.addEventListener('input', () => {
+                clearTimeout(debounceTimeout);
+                debounceTimeout = setTimeout(() => {
+                    const query = tagInput.value.trim();
+                    if (query.length > 1) {
+                        fetch(`/tags/suggest.json?q=${encodeURIComponent(query)}`)
+                            .then(response => response.json())
+                            .then(data => {
+                                suggestionList.innerHTML = '';
+                                data.tags.forEach(tag => {
+                                    const option = document.createElement('option');
+                                    option.value = tag.tag;
+                                    suggestionList.appendChild(option);
+                                });
+                            })
+                            .catch(err => console.error('Fetch error:', err));
+                    }
+                }, 300);
+            });
+        }
     });
+
+    if (typeof jQuery !== 'undefined') {
+        jQuery(function($) {
+            $('.select2').select2();
+        });
+    } else {
+        console.error('jQuery is not loaded.');
+    }
 </script>
+<?php $this->end(); ?>
 

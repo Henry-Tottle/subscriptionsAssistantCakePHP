@@ -152,6 +152,7 @@ class TagsController extends AppController
         $this->request->allowMethod('get');
         $query = $this->request->getQuery('q');
         $tags = $this->Tags->find()
+            ->distinct(['tag'])
             ->where(['tag LIKE' => $query . '%'])
             ->limit(10);
 
