@@ -55,7 +55,7 @@
                 debounceTimeout = setTimeout(() => {
                     const query = tagInput.value.trim();
                     if (query.length > 1) {
-                        fetch(`/tags/suggest.json?q=${encodeURIComponent(query)}`)
+                        fetch(`/tags/suggest?q=${encodeURIComponent(query)}`)
                             .then(response => response.json())
                             .then(data => {
                                 suggestionList.innerHTML = '';
