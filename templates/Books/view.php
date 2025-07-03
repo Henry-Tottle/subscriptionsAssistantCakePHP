@@ -8,7 +8,6 @@
     <aside class="column">
         <div class="side-nav">
             <h4 class="heading"><?= __('Actions') ?></h4>
-            <?= $this->Html->link(__('Edit Book'), ['action' => 'edit', $book->id], ['class' => 'side-nav-item']) ?>
             <?= $this->Form->postLink(__('Delete Book'), ['action' => 'delete', $book->id], ['confirm' => __('Are you sure you want to delete # {0}?', $book->id), 'class' => 'side-nav-item']) ?>
             <?= $this->Html->link(__('List Books'), ['action' => 'index'], ['class' => 'side-nav-item']) ?>
             <?= $this->Html->link(__('New Book'), ['action' => 'add'], ['class' => 'side-nav-item']) ?>
@@ -17,6 +16,8 @@
     <div class="column column-80">
         <div class="books view content">
             <h3><?= h($book->title) ?></h3>
+                        <?= $this->Html->link(__('Edit Book'), ['action' => 'edit', $book->id], ['class' => 'button float-right']) ?>
+
             <table>
                 <tr>
                     <th><?= __('Image') ?></th>
