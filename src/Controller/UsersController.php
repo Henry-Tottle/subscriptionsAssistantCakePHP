@@ -111,6 +111,13 @@ class UsersController extends AppController
         $this->request->allowMethod(['get', 'post']);
         $result = $this->Authentication->getResult();
         if ($result && $result->isValid()) {
+            $user = $this->request->getAttribute('identity');
+            $username = $user->name ?? 'unknown';
+
+            $scriptPath = ROOT . DS . 'scripts' . DS . 'log_in_warning.py';
+            $escapedUser = escapeshellarg($username);
+            shell_exec("python3 " . escapeshellarg($scriptPath). " $escapedUser >> " . ROOT . "/logs/login_alert.log 2>&1 &");
+
             $redirect = $this->request->getQuery('redirect', [
                 'controller' => 'Books',
                 'action' => 'index',

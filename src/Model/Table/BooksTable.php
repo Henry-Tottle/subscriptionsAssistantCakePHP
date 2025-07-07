@@ -66,18 +66,21 @@ class BooksTable extends Table
     {
         $validator
             ->scalar('isbn')
-            ->maxLength('isbn', 255)
-            ->allowEmptyString('isbn');
+            ->lengthBetween('isbn', [13, 13], 'ISBN must be exactly 13 characters long')
+            ->requirePresence('isbn', 'create')
+            ->notEmptyString('isbn', 'ISBN is required');
 
         $validator
             ->scalar('title')
             ->maxLength('title', 255)
-            ->allowEmptyString('title');
+            ->requirePresence('title', 'create')
+            ->notEmptyString('title', 'Title is required');
 
         $validator
             ->scalar('author')
             ->maxLength('author', 255)
-            ->allowEmptyString('author');
+            ->requirePresence('author', 'create')
+            ->notEmptyString('author', 'Author is required');
 
         $validator
             ->scalar('format')

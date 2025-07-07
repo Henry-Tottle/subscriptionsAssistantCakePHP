@@ -27,58 +27,92 @@ class ReviewsControllerTest extends TestCase
         'app.Users',
     ];
 
-    /**
-     * Test index method
-     *
-     * @return void
-     * @uses \App\Controller\ReviewsController::index()
-     */
+    public function setUp(): void
+    {
+        parent::setUp();
+        $this->enableCsrfToken();
+        $this->enableSecurityToken();
+
+        $this->session([
+            'Auth' => [
+                'User' => [
+                    'id' => 1,
+                    'username' => 'testuser',
+                    'role' => 'admin',
+                ]
+            ]
+        ]);
+    }
+
     public function testIndex(): void
     {
-        $this->markTestIncomplete('Not implemented yet.');
+        $this->get('/reviews');
+        $this->assertResponseOk();
+        $this->assertResponseContains('<table'); // Assuming it renders a list
     }
 
-    /**
-     * Test view method
-     *
-     * @return void
-     * @uses \App\Controller\ReviewsController::view()
-     */
     public function testView(): void
     {
-        $this->markTestIncomplete('Not implemented yet.');
+        $this->get('/reviews/view/1');
+        $this->assertResponseOk();
+        $this->assertResponseContains('Review'); // Replace with real content if needed
     }
 
-    /**
-     * Test add method
-     *
-     * @return void
-     * @uses \App\Controller\ReviewsController::add()
-     */
-    public function testAdd(): void
+    public function testAddSuccess(): void
     {
-        $this->markTestIncomplete('Not implemented yet.');
+        $data = [
+            'comment' => 'Excellent read.',
+            'book_id' => 1,
+            'user_id' => 1
+        ];
+        $this->post('/reviews/add?book_id=1', $data);
+        $this->assertResponseCode(302);
+        $this->assertRedirectContains('/books/view/1');
+        $this->assertSession('The review has been saved.', 'Flash.flash.0.message');
     }
 
-    /**
-     * Test edit method
-     *
-     * @return void
-     * @uses \App\Controller\ReviewsController::edit()
-     */
-    public function testEdit(): void
+    public function testAddFailure(): void
     {
-        $this->markTestIncomplete('Not implemented yet.');
+        $data = [
+            'comment' => '',
+        ];
+        $this->post('/reviews/add', $data);
+        $this->assertResponseCode(200);
+        $this->assertResponseContains('The review could not be saved');
     }
 
-    /**
-     * Test delete method
-     *
-     * @return void
-     * @uses \App\Controller\ReviewsController::delete()
-     */
-    public function testDelete(): void
+    public function testEditSuccess(): void
     {
-        $this->markTestIncomplete('Not implemented yet.');
+        $data = [
+            'comment' => 'Updated review comment',
+        ];
+        $this->post('/reviews/edit/1', $data);
+        $this->assertResponseCode(302);
+        $this->assertRedirectContains('/books/view/1');
+    }
+
+    public function testEditFailure(): void
+    {
+        $data = [
+            'comment' => '',
+        ];
+        $this->post('/reviews/edit/1', $data);
+        $this->assertResponseCode(200);
+        $this->assertResponseContains('The review could not be saved');
+    }
+
+    public function testDeleteSuccess(): void
+    {
+        $this->post('/reviews/delete/1');
+        $this->assertResponseCode(302);
+        $this->assertRedirectContains('/books/view');
+        $this->assertSession('The review has been deleted.', 'Flash.flash.0.message');
+    }
+
+    public function testDeleteFailure(): void
+    {
+        // Simulate failure: non-existent record
+        $this->post('/reviews/delete/9999');
+        $this->assertResponseCode(404);
     }
 }
