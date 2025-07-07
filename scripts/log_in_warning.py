@@ -8,33 +8,37 @@ from email.mime.multipart import MIMEMultipart
 if os.getenv("RAILWAY_ENVIRONMENT") is None:
     load_dotenv(dotenv_path='config/.env')
 
-def send_login_alert(username: str):
-    sender_email = os.getenv('SENDER_EMAIL')
-    receiver_email = os.getenv('RECEIVER_EMAIL')
-    password = os.getenv('APP_PASSWORD')
+LOG_PATH = os.path.join(os.path.dirname(__file__), "logins.txt")
 
-    subject = f"Login Alert: {username}"
-    body = f"User '{username}' has just logged in to the subscriptions app."
+def send_daily_report():
+    if not os.path.exists(LOG_PATH):
+        print("No logins file found")
+        return
+    with open(LOG_PATH, 'r') as file:
+        content = file.read().strip()
 
-    msg = MIMEMultipart()
-    msg['From'] = sender_email
-    msg['To'] = receiver_email
-    msg['Subject'] = subject
+    if not content:
+        print("No logins to report today.")
+        return
+    
+    sender = os.getenv("SENDER_EMAIL")
+    receiver = os.getenv("RECEIVER_EMAIL")
+    password = os.getenv("APP_PASSWORD")
 
-    msg.attach(MIMEText(body, "plain"))
+    msg = MIMEText(f"Daily login summary:\n\n{content}")
+    msg['Subject'] = "Daily Login Report Subscriptions Assistant"
+    msg["From"] = sender
+    msg["To"] = receiver
 
     try:
         with smtplib.SMTP_SSL("smtp.gmail.com", 465) as server:
-            server.login(sender_email, password)
-            server.sendmail(sender_email, receiver_email, msg.as_string())
-        print("Login alert email sent successfully.")
-    except Exception as e:
-        print(f"Error sending email: {e}")
+            server.login(sender, password)
+            server.sendmail(sender, receiver, msg.as_string())
 
-import sys
+        print("Report sent successfuly.")
+        open(LOG_PATH, "w").close()
+    except Exception as e:
+        print(f"Error sending report: {e}")
 
 if __name__ == "__main__":
-    if len(sys.argv) > 1:
-        send_login_alert(sys.argv[1])
-    else:
-        send_login_alert("unknown")
+    send_daily_report()

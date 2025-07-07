@@ -114,9 +114,9 @@ class UsersController extends AppController
             $user = $this->request->getAttribute('identity');
             $username = $user->name ?? 'unknown';
 
-            $scriptPath = ROOT . DS . 'scripts' . DS . 'log_in_warning.py';
-            $escapedUser = escapeshellarg($username);
-            shell_exec("python3 " . escapeshellarg($scriptPath). " $escapedUser >> " . ROOT . "/logs/login_alert.log 2>&1 &");
+            require_once(ROOT . '/scripts/loginLogger.php');
+
+            logLogin($username);
 
             $redirect = $this->request->getQuery('redirect', [
                 'controller' => 'Books',
