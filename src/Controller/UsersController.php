@@ -15,13 +15,22 @@ class UsersController extends AppController
      *
      * @return \Cake\Http\Response|null|void Renders view
      */
-    public function index()
-    {
-        $query = $this->Users->find();
-        $users = $this->paginate($query);
+  public function index()
+{
+    $user = $this->Authentication->getIdentity();
 
-        $this->set(compact('users'));
+    if ($user->admin) {
+        // Admin sees all users
+        $query = $this->Users->find();
+    } else {
+        // Non-admin sees only their own record
+        $query = $this->Users->find()->where(['id' => $user->id]);
     }
+
+    $users = $this->paginate($query);
+
+    $this->set(compact('users'));
+}
 
     /**
      * View method
