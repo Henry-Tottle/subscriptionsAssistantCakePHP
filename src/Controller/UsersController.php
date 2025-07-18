@@ -20,8 +20,10 @@ class UsersController extends AppController
     $user = $this->Authentication->getIdentity();
 
     if ($user->admin) {
+        // Admin sees all users
         $query = $this->Users->find();
     } else {
+        // Non-admin sees only their own record
         $query = $this->Users->find()->where(['id' => $user->id]);
     }
 

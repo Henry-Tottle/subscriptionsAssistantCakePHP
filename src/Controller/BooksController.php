@@ -147,7 +147,7 @@ class BooksController extends AppController
             if ($this->Books->save($book)) {
                 $this->Flash->success(__('The book has been saved.'));
 
-                return $this->redirect(['action' => 'view', $id]);
+                return $this->redirect(['action' => 'index']);
             }
             $this->Flash->error(__('The book could not be saved. Please, try again.'));
         }
