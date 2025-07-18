@@ -116,33 +116,32 @@ implements AuthenticationServiceProviderInterface
      */
 
     public function getAuthenticationService(ServerRequestInterface $request): AuthenticationServiceInterface
-    {
-        $authenticationService = new AuthenticationService([
-            'unauthenticatedRedirect' => Router::url('/users/login'),
-            'queryParam' => 'redirect',
-        ]);
+{
+    $authenticationService = new AuthenticationService([
+        'unauthenticatedRedirect' => Router::url('/users/login'),
+        'queryParam' => 'redirect',
+    ]);
 
-        // Load identifiers, ensure we check email and password fields
-        $authenticationService->loadIdentifier('Authentication.Password', [
-            'fields' => [
-                'username' => 'email',
-                'password' => 'password',
-            ],
-        ]);
+    // Load identifiers and authenticators
+    $authenticationService->loadIdentifier('Authentication.Password', [
+        'fields' => [
+            'username' => 'email',
+            'password' => 'password',
+        ],
+    ]);
 
-        // Load the authenticators, you want session first
-        $authenticationService->loadAuthenticator('Authentication.Session');
-        // Configure form data check to pick email and password
-        $authenticationService->loadAuthenticator('Authentication.Form', [
-            'fields' => [
-                'username' => 'email',
-                'password' => 'password',
-            ],
-            'loginUrl' => Router::url('/users/login'),
-        ]);
+    $authenticationService->loadAuthenticator('Authentication.Session');
+    $authenticationService->loadAuthenticator('Authentication.Form', [
+        'fields' => [
+            'username' => 'email',
+            'password' => 'password',
+        ],
+        'loginUrl' => Router::url('/users/login'),
+    ]);
 
-        return $authenticationService;
-    }
+    return $authenticationService;
+}
+
     public function services(ContainerInterface $container): void
     {
     }

@@ -15,13 +15,20 @@ class UsersController extends AppController
      *
      * @return \Cake\Http\Response|null|void Renders view
      */
-    public function index()
-    {
-        $query = $this->Users->find();
-        $users = $this->paginate($query);
+  public function index()
+{
+    $user = $this->Authentication->getIdentity();
 
-        $this->set(compact('users'));
+    if ($user->admin) {
+        $query = $this->Users->find();
+    } else {
+        $query = $this->Users->find()->where(['id' => $user->id]);
     }
+
+    $users = $this->paginate($query);
+
+    $this->set(compact('users'));
+}
 
     /**
      * View method
@@ -111,6 +118,13 @@ class UsersController extends AppController
         $this->request->allowMethod(['get', 'post']);
         $result = $this->Authentication->getResult();
         if ($result && $result->isValid()) {
+            $user = $this->request->getAttribute('identity');
+            $username = $user->name ?? 'unknown';
+
+            require_once(ROOT . '/scripts/loginLogger.php');
+
+            logLogin($username);
+
             $redirect = $this->request->getQuery('redirect', [
                 'controller' => 'Books',
                 'action' => 'index',

@@ -1,0 +1,28 @@
+name: Send Daily Login Report
+
+on:
+  schedule:
+    - cron: '0 8 * * *'  # Runs every day at 8 AM UTC
+  workflow_dispatch:     # Allows manual trigger
+
+jobs:
+  send_report:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up Python 3.x
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'
+
+      - name: Install dependencies
+        run: pip install python-dotenv
+
+      - name: Run log_in_warning.py script
+        env:
+          SENDER_EMAIL: ${{ secrets.SENDER_EMAIL }}
+          RECEIVER_EMAIL: ${{ secrets.RECEIVER_EMAIL }}
+          APP_PASSWORD: ${{ secrets.APP_PASSWORD }}
+        run: python scripts/log_in_warning.py

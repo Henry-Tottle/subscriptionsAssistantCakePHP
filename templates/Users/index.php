@@ -4,6 +4,11 @@
  * @var iterable<\App\Model\Entity\User> $users
  */
 ?>
+<div class="row">
+<div class="sidebar">
+            <h4 class="heading"><?= __('Actions') ?></h4>
+            <?= $this->Html->link(__('List Books'), ['controller' => 'Books','action' => 'index'], ['class' => 'side-nav-item']) ?>
+        </div>
 <div class="users index content">
     <?= $this->Html->link(__('New User'), ['action' => 'add'], ['class' => 'button float-right']) ?>
     <h3><?= __('Users') ?></h3>
