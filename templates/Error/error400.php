@@ -8,9 +8,6 @@ use Cake\Core\Configure;
 
 $this->layout = 'error';
 
-// Detect CSRF error
-$isCsrfError = stripos($message, 'csrf') !== false;
-
 if (Configure::read('debug')) :
     $this->layout = 'dev_error';
 
@@ -21,12 +18,6 @@ if (Configure::read('debug')) :
     echo $this->element('auto_table_warning');
     $this->end();
 endif;
-
-// Redirect if CSRF error
-if ($isCsrfError) {
-    header('Location: https://subscriptionsassistantcakephp-production.up.railway.app/users/login');
-    exit;
-}
 ?>
 <h2><?= h($message) ?></h2>
 <p class="error">
