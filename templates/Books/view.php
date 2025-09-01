@@ -15,6 +15,16 @@
     </aside>
     <div class="column column-80">
         <div class="books view content">
+            <div>
+                <?= $this->Form->create(null, ['url'=>['action'=>'index'],'type' => 'get']) ?>
+                <?= $this->Form->control('search', [
+                    'label' => false,
+                    'placeholder' => 'Search by title, author or ISBN',
+                    'value' => $this->request->getQuery('search')
+                    ]) ?>
+                <?= $this->Form->submit('Search') ?>
+                <?= $this->Form->end() ?>
+            </div>
             <h3><?= h($book->title) ?></h3>
                         <?= $this->Html->link(__('Edit Book'), ['action' => 'edit', $book->id], ['class' => 'button float-right']) ?>
 

@@ -78,7 +78,7 @@
                     <h6><?php echo h($book->title); ?></h6>
                     <p><strong>Author:</strong> <?php echo h($book->author); ?></p>
                     <p><strong>ISBN:</strong> <?php echo h($book->isbn); ?></p>
-                    <p><strong>Published:</strong> <?php echo h($book->pubDate); ?></p>
+                    <p><strong>Published:</strong> <?php echo h($book->pubDate->i18nFormat('dd/MM/yy')); ?></p>
                     <p><strong>Picks:</strong> <?php echo h($book->picksCount); ?></p>
                     <p><strong>Format:</strong> <?php echo h($book->format); ?></p>
                     <?= $this->Html->link(__('View'), ['action' => 'view', $book->id], ['class' => 'button view-button']) ?>
