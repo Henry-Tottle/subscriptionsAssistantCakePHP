@@ -121,7 +121,17 @@ class BooksController extends AppController
     {
         $book = $this->Books->newEmptyEntity();
         if ($this->request->is('post')) {
-            $book = $this->Books->patchEntity($book, $this->request->getData());
+            $data = $this->request->getData();
+
+            // Only set image if ISBN is provided
+            if (!empty($data['isbn'])) {
+                $isbn = preg_replace('/\D/', '', $data['isbn']); // keep only digits, just in case
+                $prefix = substr($isbn, 0, 8); 
+                $data['image'] = $prefix . '/' . $isbn;
+            }
+
+            $book = $this->Books->patchEntity($book, $data);
+
             if ($this->Books->save($book)) {
                 $this->Flash->success(__('The book has been saved.'));
 
@@ -217,7 +227,6 @@ class BooksController extends AppController
             'format' => 'format',
             'publish_date' => 'pubDate',
             'publisher' => 'publisher',
-            'subject' => 'subject',
             'price' => 'price',
             'picks_count' => 'picksCount',
         ];

@@ -26,7 +26,6 @@
                     echo $this->Form->control('subject');
                     echo $this->Form->control('price');
                     echo $this->Form->control('picksCount');
-                    echo $this->Form->control('image');
                 ?>
             </fieldset>
             <?= $this->Form->button(__('Submit')) ?>
