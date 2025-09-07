@@ -17,7 +17,7 @@
     </aside>
     <div class="column column-80">
         <div class="tags view content">
-            <h3><?= h($tag->id) ?></h3>
+            <h3><?= h($tag->tag) ?></h3>
             <table>
 
                 <?php if (!empty($books)): ?>
